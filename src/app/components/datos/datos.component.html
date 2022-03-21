@@ -1,0 +1,27 @@
+<ul class="nav justify-content-end">
+  <li class="nav-item m-1">
+    <a class="btn btn-danger pointer" aria-current="page" (click)="logout()">Cerrar sesión</a>
+  </li>
+</ul>
+
+<div class="container mt-5">
+  <table class="table">
+    <caption></caption>
+    <thead>
+      <tr>
+        <th class="text-center" scope="col">#</th>
+        <th class="text-center" scope="col">Username</th>
+        <th class="text-center" scope="col">Email</th>
+        <th class="text-center" scope="col">Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let dato of datos">
+        <td class="text-center">{{ dato._id }}</td>
+        <td class="text-center">{{ dato.username }}</td>
+        <td class="text-center">{{ dato.email }}</td>
+        <td class="text-center">{{ dato.status | titlecase }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
