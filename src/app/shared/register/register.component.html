@@ -1,18 +1,26 @@
-<div class="container mt-5">
+<div class="center-flexbox row">
+  <div class="col-10 col-sm-7 col-md-7 col-lg-7 col-xl-5">
     <form [formGroup]="signupForm">
         <div class="mb-3">
-          <label class="form-label">User name</label>
+          <label class="form-label">Usuario</label>
           <input type="text" formControlName="username" class="form-control">
         </div>
         <div class="mb-3">
-          <label  class="form-label">Email</label>
+          <label  class="form-label">Correo</label>
           <input type="email" formControlName="email" class="form-control">
         </div>
         <div class="mb-3">
-            <label class="form-label">Password</label>
+            <label class="form-label">Contraseña</label>
             <input type="password" formControlName="password" class="form-control">
         </div>
-
-        <button class="btn btn-primary" (click)="signup()">Submit</button>
+        <div class="text-center">
+          <div class="mb-3">
+            <button [class.disabled]="this.signupForm.invalid" class="btn btn-primary" (click)="signup()">Registrar</button>
+          </div>
+          <div>
+            <button class="btn btn-secondary" [routerLink]="['/login']">Volver</button>
+          </div>
+        </div>
     </form>
+  </div>
 </div>

@@ -1,30 +1,29 @@
 import Swal from 'sweetalert2';
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { Component } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
+
+import { Properties } from '../../properties/properties';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent {
 
   public signupForm = this.fb.group({
-    username: [''],
-    email: [''],
-    password: [''],
+    username: ['', [Validators.required, Validators.minLength(3)]],
+    email: ['', [Validators.required, Validators.pattern(Properties.VALIDATION_EMAIL)]],
+    password: ['', [Validators.required, Validators.minLength(5)]],
   });
 
   constructor( 
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router
-    ) { }
-
-  ngOnInit(): void {
-  }
+  ) { }
 
   signup() {
     this.authService.signup(this.signupForm.value).subscribe(

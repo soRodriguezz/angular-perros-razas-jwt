@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from 'src/app/services/auth.service';
+
 import Swal from 'sweetalert2';
+
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -21,7 +23,7 @@ export class LoginComponent {
     private router: Router  
   ) {}
 
-  login() {
+  public login(): void {
     this.authService.signin(this.loginForm.value).subscribe({
       next: (data: any) => {
         localStorage.setItem('token', data.token);
