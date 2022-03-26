@@ -28,7 +28,7 @@ import { RegisterComponent } from './shared/register/register.component';
     {
       provide: HTTP_INTERCEPTORS,
       useClass: JwtInterceptorInterceptor,
-      multi: true
+      multi: true,
     }
   ],
   bootstrap: [AppComponent],

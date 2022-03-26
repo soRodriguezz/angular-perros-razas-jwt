@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 
 import { AuthService } from 'src/app/services/auth.service';
 import { Properties } from 'src/app/properties/properties';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -22,13 +23,17 @@ export class LoginComponent {
     private authService: AuthService, 
     private fb: FormBuilder,
     private router: Router  
-  ) {}
+  ) {
+    if(sessionStorage.getItem(environment.TOKEN)) {
+      this.router.navigate(['/datos']);
+    }
+  }
 
   public login(): void {
     if( this.loginForm.valid) {
       this.authService.signin(this.loginForm.value).subscribe({
         next: (data: any) => {
-          localStorage.setItem('token', data.token);
+          sessionStorage.setItem(environment.TOKEN, data.token);
           this.router.navigate(['/datos']);
         },
         error: (error: any) => {
