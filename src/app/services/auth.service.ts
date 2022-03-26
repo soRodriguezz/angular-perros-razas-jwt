@@ -46,4 +46,30 @@ export class AuthService {
     );
   } 
 
+  verifyTokenAdmin() {
+    const token = sessionStorage.getItem(environment.TOKEN);
+    return this.http.post('http://localhost:8002/api/verify', token, {
+      headers: {
+        authorization: `${token}`,
+      }
+    })
+    .pipe(
+      tap( (resp: any) => {
+        sessionStorage.setItem(environment.TOKEN, resp.token);
+      }),
+      map((resp: any) => {
+        if(resp.roles.includes('admin')) return true;
+        sessionStorage.removeItem(environment.TOKEN);
+        Swal.fire({
+          title: 'Acceso denegado',
+          text: 'No tienes permisos para acceder a esta sección',
+          icon: 'error',
+          confirmButtonText: 'Aceptar',
+        });
+        return false;
+      }),
+      catchError(() => of(false))
+    );
+  } 
+
 }
