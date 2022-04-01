@@ -22,22 +22,18 @@ export class AuthRoleGuard implements CanActivate {
     | boolean
     | UrlTree {
 
-      return this.authService.authTokenVerify().pipe(
-        tap((esPermitido: any) => {
-          if(!esPermitido.permitido) {
-            this.router.navigate(['/login']);
-          }
-        })
-      );
-    
-    // return this.authService.verifyTokenAdmin()
-    //   .pipe(
-    //     tap((estaAutenticado: any) => {
-    //       if(!estaAutenticado) {
-    //         this.router.navigate(['/login']);
-    //       }
-    //     }),
-    //   );
+      return this.authService.authTokenVerify()
+        .pipe(
+          tap((esPermitido: any) => {
+            if(!esPermitido.permitido) {
+              return true;
+            }else {
+              this.router.navigate(['/login']);
+              return false;
+            }
+          })
+        );
+  
   }
   
 }

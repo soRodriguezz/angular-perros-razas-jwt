@@ -1,7 +1,7 @@
 import Swal  from 'sweetalert2';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, map, of, tap } from 'rxjs';
+import { catchError, map, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -24,41 +24,18 @@ export class AuthService {
     return this.http.post('http://localhost:8002/api/verify', {})
       .pipe(
         map((data: any) => {
-          if(data.permitido) {
-            return true;
-          } else {
-            return false;
-          }
+          if(data.permitido) return true;
+          Swal.fire({
+            title: 'Acceso denegado',
+            text: 'No tienes permisos para acceder a esta sección',
+            icon: 'error',
+            confirmButtonText: 'Aceptar',
+          });
+          sessionStorage.removeItem(environment.TOKEN);
+          return false;
         }),
         catchError(() => of(false))
       );
   }
-
-  // verifyTokenModerator() {
-  //   const token = sessionStorage.getItem(environment.TOKEN);
-  //   return this.http.post('http://localhost:8002/api/verify', token, {
-  //     headers: {
-  //       authorization: `${token}`,
-  //     }
-  //   })
-  //   .pipe(
-  //     tap( (resp: any) => {
-  //       sessionStorage.setItem(environment.TOKEN, resp.token);
-  //     }),
-  //     map((resp: any) => {
-  //       if(resp.roles.includes('moderator')) return true;
-  //       sessionStorage.removeItem(environment.TOKEN);
-  //       Swal.fire({
-  //         title: 'Acceso denegado',
-  //         text: 'No tienes permisos para acceder a esta sección',
-  //         icon: 'error',
-  //         confirmButtonText: 'Aceptar',
-  //       });
-  //       return false;
-  //     }),
-  //     catchError(() => of(false))
-  //   );
-  // } 
-
 
 }
