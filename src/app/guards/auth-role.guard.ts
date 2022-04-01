@@ -6,8 +6,8 @@ import { AuthService } from '../services/auth.service';
 @Injectable({
   providedIn: 'root'
 })
-export class AuthRoleModeratorGuard implements CanActivate {
- 
+export class AuthRoleGuard implements CanActivate {
+  
   constructor(
     private router: Router, 
     private authService: AuthService
@@ -21,14 +21,23 @@ export class AuthRoleModeratorGuard implements CanActivate {
     | Promise<boolean | UrlTree>
     | boolean
     | UrlTree {
-    
-    return this.authService.verifyTokenModerator()
-      .pipe(
-        tap((estaAutenticado: any) => {
-          if(!estaAutenticado) {
+
+      return this.authService.authTokenVerify().pipe(
+        tap((esPermitido: any) => {
+          if(!esPermitido.permitido) {
             this.router.navigate(['/login']);
           }
-        }),
+        })
       );
+    
+    // return this.authService.verifyTokenAdmin()
+    //   .pipe(
+    //     tap((estaAutenticado: any) => {
+    //       if(!estaAutenticado) {
+    //         this.router.navigate(['/login']);
+    //       }
+    //     }),
+    //   );
   }
+  
 }

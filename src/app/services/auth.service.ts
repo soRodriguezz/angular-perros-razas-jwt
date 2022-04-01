@@ -20,56 +20,45 @@ export class AuthService {
     return this.http.post('http://localhost:8002/api/signup', datos, {});
   }
 
-  verifyTokenModerator() {
-    const token = sessionStorage.getItem(environment.TOKEN);
-    return this.http.post('http://localhost:8002/api/verify', token, {
-      headers: {
-        authorization: `${token}`,
-      }
-    })
-    .pipe(
-      tap( (resp: any) => {
-        sessionStorage.setItem(environment.TOKEN, resp.token);
-      }),
-      map((resp: any) => {
-        if(resp.roles.includes('moderator')) return true;
-        sessionStorage.removeItem(environment.TOKEN);
-        Swal.fire({
-          title: 'Acceso denegado',
-          text: 'No tienes permisos para acceder a esta sección',
-          icon: 'error',
-          confirmButtonText: 'Aceptar',
-        });
-        return false;
-      }),
-      catchError(() => of(false))
-    );
-  } 
+  authTokenVerify() {
+    return this.http.post('http://localhost:8002/api/verify', {})
+      .pipe(
+        map((data: any) => {
+          if(data.permitido) {
+            return true;
+          } else {
+            return false;
+          }
+        }),
+        catchError(() => of(false))
+      );
+  }
 
-  verifyTokenAdmin() {
-    const token = sessionStorage.getItem(environment.TOKEN);
-    return this.http.post('http://localhost:8002/api/verify', token, {
-      headers: {
-        authorization: `${token}`,
-      }
-    })
-    .pipe(
-      tap( (resp: any) => {
-        sessionStorage.setItem(environment.TOKEN, resp.token);
-      }),
-      map((resp: any) => {
-        if(resp.roles.includes('admin')) return true;
-        sessionStorage.removeItem(environment.TOKEN);
-        Swal.fire({
-          title: 'Acceso denegado',
-          text: 'No tienes permisos para acceder a esta sección',
-          icon: 'error',
-          confirmButtonText: 'Aceptar',
-        });
-        return false;
-      }),
-      catchError(() => of(false))
-    );
-  } 
+  // verifyTokenModerator() {
+  //   const token = sessionStorage.getItem(environment.TOKEN);
+  //   return this.http.post('http://localhost:8002/api/verify', token, {
+  //     headers: {
+  //       authorization: `${token}`,
+  //     }
+  //   })
+  //   .pipe(
+  //     tap( (resp: any) => {
+  //       sessionStorage.setItem(environment.TOKEN, resp.token);
+  //     }),
+  //     map((resp: any) => {
+  //       if(resp.roles.includes('moderator')) return true;
+  //       sessionStorage.removeItem(environment.TOKEN);
+  //       Swal.fire({
+  //         title: 'Acceso denegado',
+  //         text: 'No tienes permisos para acceder a esta sección',
+  //         icon: 'error',
+  //         confirmButtonText: 'Aceptar',
+  //       });
+  //       return false;
+  //     }),
+  //     catchError(() => of(false))
+  //   );
+  // } 
+
 
 }
